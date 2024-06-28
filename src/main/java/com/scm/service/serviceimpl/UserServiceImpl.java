@@ -7,9 +7,9 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.scm.entity.User;
+import com.scm.helpers.ResourceNotFound;
 import com.scm.repository.UserRepository;
 import com.scm.service.UserService;
-
 import lombok.AllArgsConstructor;
 
 
@@ -30,44 +30,79 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getUserById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getUserById'");
+        
+         User user = userRepo.findById(id).orElseThrow(() -> 
+        new ResourceNotFound("User Not Found Fot Th e Given Id "  + id));
+
+        return Optional.of(user);
+
     }
 
     @Override
     public Optional<User> updateUser(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
+        
+
+        User userToUpdate = userRepo.findById(user.getUserId()).orElseThrow(() ->
+             new ResourceNotFound("No user with given id" + user.getUserId()));
+
+        userToUpdate.setName(user.getName());
+        userToUpdate.setAbout(user.getAbout());
+        userToUpdate.setEmail(user.getEmail());
+        userToUpdate.setPhoneNumber(user.getPhoneNumber());
+        userToUpdate.setProfilePic(user.getProfilePic());
+
+        return Optional.of(userToUpdate);
+
     }
+
 
     @Override
     public void deleteUser(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteUser'");
+        
+        User userToDelete = userRepo.findById(id).orElseThrow(() -> new ResourceNotFound("No user with id : " + id));
+
+        userRepo.delete(userToDelete);
+
     }
+
 
     @Override
     public boolean isUserExist(String userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isUserExist'");
+        
+        User isUser = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFound("No user found with id : " + userId));
+
+        return isUser == null;
+
     }
+
 
     @Override
     public boolean isUserExistByEmail(String email) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isUserExistByEmail'");
+        
+        User emailUser = userRepo.findByEmail(email).orElseThrow(() -> new ResourceNotFound("No user with email : " + email));
+
+        return emailUser == null;
+
     }
+
 
     @Override
     public List<User> getAllUsers() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllUsers'");
+        
+        List<User> allUser = userRepo.findAll();
+        return allUser;
+
     }
+
+
 
     @Override
     public User getUserByEmail(String email) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getUserByEmail'");
+        
+        User emailUser = userRepo.findByEmail(email).orElseThrow(() -> new ResourceNotFound("No user with email : " + email));
+
+        return emailUser;
+        
     }
     
 }
