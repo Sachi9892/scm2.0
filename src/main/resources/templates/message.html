@@ -1,11 +1,13 @@
-<div
-  data-th-if="${session.message}"
-  data-th-object="${session.message}"
-  data-th-fragment="messagebox"
-  data-th-classappend="*{'text-'+type+'-800 border border-'+type+'-300 rounded-lg bg-'+type+'-50 dark:bg-gray-800 dark:text-'+type+'-400 dark:border-'+type+'-800'}"
-  class="flex items-center p-4 mb-4 text-sm"
-  role="alert"
->
+<div th:if="${session.message}"
+     th:object="${session.message}"
+     th:fragment="messagebox"
+     th:classappend="*{'text-' + ${session.message.messageType.name().toLowerCase()} + '-800 border border-' + ${session.message.messageType.name().toLowerCase()} + '-300 rounded-lg bg-' + ${session.message.messageType.name().toLowerCase()} + '-50 dark:bg-gray-800 dark:text-' + ${session.message.messageType.name().toLowerCase()} + '-400 dark:border-' + ${session.message.messageType.name().toLowerCase()}}"
+     class="flex items-center p-4 mb-4 text-sm"
+     role="alert">
+    <!-- Your message content here -->
+    <p th:text="${session.message.content}"></p>
+</div>
+
   <svg
     class="flex-shrink-0 inline w-4 h-4 me-3"
     aria-hidden="true"

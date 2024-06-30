@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.scm.entity.User;
+import com.scm.helpers.AppConstants;
 import com.scm.helpers.ResourceNotFound;
 import com.scm.repository.UserRepository;
 import com.scm.service.UserService;
@@ -19,11 +21,19 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepo;
 
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public User saveUser(User user) {
         
         String id = UUID.randomUUID().toString();
         user.setUserId(id);
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        //Define role of the user
+        user.setRoleList(List.of(AppConstants.ROLE_USER));
+
         return  userRepo.save(user);
         
     }
